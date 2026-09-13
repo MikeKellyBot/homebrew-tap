@@ -19,8 +19,8 @@
 class Ssf < Formula
   desc "GitHub issues assigned to a bot become coding-agent sessions in herdr or Orca"
   homepage "https://github.com/mikekelly/simple-software-factory"
-  url "https://github.com/mikekelly/simple-software-factory/archive/refs/tags/v0.4.0.tar.gz"
-  sha256 "463fa4138bef1c807f1c2a07622b19a2331c6d8a7a5d5c7aae42a32767578e3a"
+  url "https://github.com/mikekelly/simple-software-factory/archive/refs/tags/v0.6.0.tar.gz"
+  sha256 "964589999c5ddeddccf27a3bdaf8f89ab17b932e4cd77692cb18c91616a5b529"
   license "MIT"
   head "https://github.com/mikekelly/simple-software-factory.git", branch: "master"
 
@@ -36,8 +36,8 @@ class Ssf < Formula
   depends_on "lima"
 
   def install
-    # Cargo.toml has one binary target, ssf; bin/ssf-ui is the Omarchy bar
-    # widget's helper and is not installed here.
+    # Cargo installs the ssf client and ssf-server daemon; bin/ssf-ui is the
+    # Omarchy bar widget's helper and is not installed here.
     system "cargo", "install", *std_cargo_args
 
     # #{HOMEBREW_PREFIX}/share/ssf/vm is where `ssf vm build` looks for the
@@ -72,9 +72,9 @@ class Ssf < Formula
   end
 
   service do
-    run [opt_bin/"ssf", "run"]
+    run [opt_bin/"ssf-server"]
     keep_alive true
-    # SSF_VM_DIR: where `ssf run` finds the VM scripts (also found relative
+    # SSF_VM_DIR: where `ssf-server` finds the VM scripts (also found relative
     # to the binary; this keeps the service independent of that lookup).
     environment_variables PATH:       std_service_path_env,
                           RUST_LOG:   "info",
