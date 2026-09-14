@@ -17,10 +17,10 @@
 # `service` block below is the launchd agent), and no herdr dependency: the
 # factory runs in a lima VM on macOS and herdr lives in the guest.
 class Ssf < Formula
-  desc "GitHub issues assigned to a bot become coding-agent sessions in herdr or Orca"
+  desc "GitHub issues assigned to a bot become coding-agent sessions in herdr"
   homepage "https://github.com/mikekelly/simple-software-factory"
-  url "https://github.com/mikekelly/simple-software-factory/archive/refs/tags/v0.7.0.tar.gz"
-  sha256 "0901ad1d86e2d3de184d377911d82d2f82f70d5a178853868f6e018fc9045e19"
+  url "https://github.com/mikekelly/simple-software-factory/archive/refs/tags/v0.8.1.tar.gz"
+  sha256 "0da243a9780b2693e50f6e232e4efe3ecfaabe83deeec2dcbfcb81272b283948"
   license "MIT"
   head "https://github.com/mikekelly/simple-software-factory.git", branch: "master"
 
@@ -29,11 +29,11 @@ class Ssf < Formula
     strategy :github_latest
   end
 
-  # macOS only, for the `brew services` clash described above.
-  depends_on :macos
   depends_on "rust" => :build
   depends_on "gh"
   depends_on "lima"
+  # macOS only, for the `brew services` clash described above.
+  depends_on :macos
 
   def install
     # Cargo installs the ssf client and ssf-server daemon; bin/ssf-ui is the
@@ -44,13 +44,6 @@ class Ssf < Formula
     # image scripts, relative to the binary (<bin>/../share/ssf/vm).
     pkgshare.install "vm", "config.example.toml", "SSF.example.md"
     doc.install "README.md", "docs"
-  end
-
-  # The service block below logs to #{var}/log/ssf.log, and neither Homebrew
-  # nor launchd makes the directory; var directories are created here by
-  # convention.
-  def post_install
-    (var/"log").mkpath
   end
 
   def caveats
